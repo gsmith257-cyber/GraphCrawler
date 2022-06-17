@@ -14,5 +14,5 @@ python graphCrawler.py -u https://test.com/graphql/api
 There is also a output option if you wish to save the GraphQL schema.
 
 Example output:
-<img src= />
+<img src=https://github.com/gsmith257-cyber/GraphCrawler/blob/main/output.PNG />
 
