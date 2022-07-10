@@ -139,10 +139,13 @@ except:
     resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
     if resp == "y":
       clairvoyance(filename)
+      print("Sleeping for 15 minutes while it runs...")
       time.sleep(900)
       print("[-] Clairvoyance is still running... let's kill it...")
       print("How to kill Clairvoyance: ps aux | grep clairvoyance | awk '{print $2}' | xargs kill")
-      time.sleep(100)
+      print("Sleeping for 1 minute to give you time...")
+      time.sleep(60)
+      print("[+] I'm awake now, let's continue...")
 
     else:
       print("[-] Exiting...")
