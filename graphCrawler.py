@@ -28,7 +28,7 @@ client = Client(transport=transport, fetch_schema_from_transport=True)
 #download the graphql schema
 schema = client.schema
 
-def clairvoyance():
+def clairvoyance(filename):
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
   os.system("python3 -m clairvoyance -o ./" + filename + " -w ./wordlist/google-10000-english-no-swears.txt " + args.url + " > /dev/null 2>&1")
   print("[+] Schema downloaded successfully")
@@ -138,7 +138,7 @@ except:
     print("[+] Apollo server detected")
     resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
     if resp == "y":
-      
+      clairvoyance(filename)
       time.sleep(900)
       print("[-] Clairvoyance is still running... let's kill it...")
       print("How to kill Clairvoyance: ps aux | grep clairvoyance | awk '{print $2}' | xargs kill")
