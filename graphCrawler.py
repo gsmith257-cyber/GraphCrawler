@@ -289,7 +289,7 @@ with open(filename, "r") as f:
     rating += 0.5
   rating = round((rating*10), 2)
   print("[+] Criticalilty rating : " + str(rating))
-  print("Do you want to get the possible paths to acess the sensative node?")
+  print("Do you want to get the possible paths to access the sensative node?")
   print("example: username from the user field")
   resp = input("(y/n): ")
   if resp == "y":
