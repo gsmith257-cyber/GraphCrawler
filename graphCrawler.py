@@ -149,7 +149,7 @@ except:
       if p.is_alive():
         print("[-] Clairvoyance is still running... let's kill it...")
         # Terminate - may not work if process is stuck for good
-        p.terminate()
+        p.kill()
         # OR Kill - will work for sure, no chance for process to finish nicely however
         # p.kill()
 
