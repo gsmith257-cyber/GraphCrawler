@@ -143,7 +143,7 @@ except:
 
       # Wait for 15 min or until process finishes
       #p.join(900)
-      p.join(1)
+      p.join(timeout=5)
 
       # If thread is still active
       if p.is_alive():
@@ -152,7 +152,6 @@ except:
         p.terminate()
         # OR Kill - will work for sure, no chance for process to finish nicely however
         # p.kill()
-        p.join()
 
     else:
       print("[-] Exiting...")
