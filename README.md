@@ -21,5 +21,6 @@ python graphCrawler.py -u https://test.com/graphql/api -o <fileName>
 The output option is not required and by default it will output to schema.json
 
 Example output:
+<div>
 <img src=https://github.com/gsmith257-cyber/GraphCrawler/blob/main/output.PNG />
 
