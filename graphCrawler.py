@@ -30,7 +30,7 @@ schema = client.schema
 
 def clairvoyance(filename):
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  subprocess.Popen(["python3","-m","clairvoyance","-o","./" + filename + "","-w","./wordlist/google-10000-english-no-swears.txt",args.url,">", "/dev/null", "2>&1"])
+  subprocess.Popen(["python3","-m","clairvoyance","-o","./" + filename + "","-w","./wordlist/google-10000-english-no-swears.txt",args.url,">", "/dev/null", "2>&1"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 # grab the schema from the endpoint
 introspectionQuery = gql(
