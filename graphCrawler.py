@@ -30,7 +30,7 @@ schema = client.schema
 
 def clairvoyance():
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  os.system("python3 -m clairvoyance -o ./data.json -w ./google-10000-english/google-10000-english-no-swears.txt " + args.url)
+  os.system("python3 -m clairvoyance -o ./data.json -w ./wordlist/google-10000-english-no-swears.txt " + args.url)
   print("[+] Schema downloaded successfully")
 
 # grab the schema from the endpoint

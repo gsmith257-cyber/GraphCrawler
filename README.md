@@ -24,3 +24,6 @@ Example output:
 <div>
 <img src=https://github.com/gsmith257-cyber/GraphCrawler/blob/main/output.PNG />
 
+<div>
+
+Wordlist from [google-10000-english](https://github.com/first20hours/google-10000-english)
