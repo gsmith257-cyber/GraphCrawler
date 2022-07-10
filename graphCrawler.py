@@ -4,7 +4,7 @@ from gql.transport.aiohttp import AIOHTTPTransport
 from graphql import *
 import argparse
 import os
-import multiprocessing
+import subprocess
 import time
 
 parser = argparse.ArgumentParser()
@@ -30,8 +30,7 @@ schema = client.schema
 
 def clairvoyance(filename):
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  os.system("python3 -m clairvoyance -o ./" + filename + " -w ./wordlist/google-10000-english-no-swears.txt " + args.url + " > /dev/null 2>&1")
-  print("[+] Schema downloaded successfully")
+  subprocess.Popen(["python3","-m","clairvoyance","-o","./" + filename + "","-w","./wordlist/google-10000-english-no-swears.txt",args.url])
 
 # grab the schema from the endpoint
 introspectionQuery = gql(
@@ -141,7 +140,7 @@ except:
       clairvoyance(filename)
       print("Sleeping for 15 minutes while it runs...")
       time.sleep(900)
-      print("[-] Clairvoyance is still running... let's kill it...")
+      print("[-] If Clairvoyance is still running let's kill it...")
       print("How to kill Clairvoyance: ps aux | grep clairvoyance | awk '{print $2}' | xargs kill")
       print("Sleeping for 1 minute to give you time...")
       time.sleep(60)
