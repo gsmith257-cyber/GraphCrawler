@@ -116,11 +116,11 @@ introspectionQuery = gql(
 # Execute the query on the transport
 resp = "n"
 print("[+] Downloading schema...")
+filename = "schema.json"
+if args.output_path:
+  filename = args.output_path
 try:
   result = client.execute(introspectionQuery)
-  filename = "schema.json"
-  if args.output_path:
-    filename = args.output_path
   with open(filename, "w") as f:
     json.dump(result, f, indent=2)
   new_line = '''{\n
