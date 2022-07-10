@@ -1,4 +1,7 @@
 # GraphCrawler
+
+![](https://github.com/gsmith257-cyber/GraphCrawler/raw/main/GraphCrawler.PNG)
+
 GraphQL automated testing for sensative queries and mutation using introspection
 
 Graph Crawler is an automated testing tool for any GraphQL endpoint with introspection enabled, most are by default.
