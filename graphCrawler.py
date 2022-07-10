@@ -30,7 +30,7 @@ schema = client.schema
 
 def clairvoyance():
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  #os.system("python3 -m clairvoyance -o ./data.json -w ./google-10000-english/google-10000-english-no-swears.txt " + args.url)
+  os.system("python3 -m clairvoyance -o ./data.json -w ./google-10000-english/google-10000-english-no-swears.txt " + args.url)
   print("[+] Schema downloaded successfully")
 
 # grab the schema from the endpoint
@@ -125,11 +125,11 @@ try:
     json.dump(result, f, indent=2)
   new_line = '''{\n
     "data": '''
-  with open('file.txt', 'r+') as file:
+  with open(filename, 'r+') as file:
     content = file.read()
     file.seek(0)
     file.write(new_line + content)
-  with open('file.txt', 'a') as file:
+  with open(filename, 'a') as file:
     file.write("\n}")
     
 except:
@@ -216,7 +216,7 @@ with open(filename, "r") as f:
   for j in sensative_locations:
       print("[+]  " + result["data"]["__schema"]["types"][i]["fields"][j]["name"] + " is a sensative query")
 
-  print("[+] Checking autherization...")
+  print("[+] Checking authorization...")
 
   easy_queries = []
   q = 0
@@ -298,7 +298,23 @@ with open(filename, "r") as f:
     rating += 0.5
   rating = round((rating*10), 2)
   print("[+] Criticalilty rating : " + str(rating))
+  print("Do you want to get the possible paths to acess the sensative node?")
+  print("example: username from the user field")
+  resp = input("(y/n): ")
+  if resp == "y":
+    x = True
+    while x:
+      type = input("Type of the sensative node: ")
+      print("[+] Getting possible paths to " + type)
+      os.system("./support/graphql-path-enum -i " + filename + " -t " + type)
+      resp = input("Do you want to get more paths? (y/n): ")
+      if resp == "n":
+        x = False
+        print("[+] Done")
 
+  else:
+    print("[-] Exiting...")
+    exit()
   #critical 9+
   #high 7+
   #medium 5+
