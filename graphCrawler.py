@@ -30,7 +30,7 @@ schema = client.schema
 
 def clairvoyance():
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  os.system("python3 -m clairvoyance -o ./data.json -w ./wordlist/google-10000-english-no-swears.txt " + args.url)
+  os.system("python3 -m clairvoyance -o ./" + filename + " -w ./wordlist/google-10000-english-no-swears.txt " + args.url + " > /dev/null 2>&1")
   print("[+] Schema downloaded successfully")
 
 # grab the schema from the endpoint
@@ -138,20 +138,11 @@ except:
     print("[+] Apollo server detected")
     resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
     if resp == "y":
-      p = multiprocessing.Process(target=clairvoyance)
-      p.start()
-
-      # Wait for 15 min or until process finishes
-      #p.join(900)
-      p.join(timeout=5)
-
-      # If thread is still active
-      if p.is_alive():
-        print("[-] Clairvoyance is still running... let's kill it...")
-        # Terminate - may not work if process is stuck for good
-        p.kill()
-        # OR Kill - will work for sure, no chance for process to finish nicely however
-        # p.kill()
+      
+      time.sleep(900)
+      print("[-] Clairvoyance is still running... let's kill it...")
+      print("How to kill Clairvoyance: ps aux | grep clairvoyance | awk '{print $2}' | xargs kill")
+      time.sleep(100)
 
     else:
       print("[-] Exiting...")
