@@ -30,7 +30,6 @@ schema = client.schema
 
 def clairvoyance(filename):
   print("[+] Trying to grab the schema using Clairvoyance (this could take a while)...")
-  print("Sleeping for 15 minutes while it runs...")
   try:
     subprocess.run(["python3","-m","clairvoyance","-o","./" + filename + "","-w","./wordlist/google-10000-english-no-swears.txt",args.url,">", "/dev/null", "2>&1"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, timeout=900)
   except subprocess.TimeoutExpired:
@@ -142,6 +141,8 @@ except:
     resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
     if resp == "y":
       clairvoyance(filename)
+      print("Sleeping for 15 minutes while it runs...")
+      time.sleep(900)
       print("[+] I'm awake now, let's continue...")
 
     else:
