@@ -36,3 +36,10 @@ The output option is not required and by default it will output to schema.json
 <div></div>
 
 Wordlist from [google-10000-english](https://github.com/first20hours/google-10000-english)
+
+
+### TODO
+- Add endpoint searching when pointed to base URL
+- Add option for "full report" following the endpoint search where it will run clairvoyance and all other aspects of the toolkit on the endpoints found
+- Default to "simple scan" to just find endpoints when this feature is added
+- Way Future: help craft queries based of the shema provided
