@@ -17,13 +17,40 @@ parser.add_argument("-o", "--output",
                     dest="output_path",
                     help="Saves schema to this file",
                     action='store')
+parser.add_argument("-a", "--headers",
+                    nargs='+',
+                    dest="headers",
+                    help="Adds specified headers to the request",
+                    action='store')
 
 args = parser.parse_args()
 
 bad_words = ["error", "Invalid token", "INTERNAL_SERVER_ERROR", "Unauthorized"]
 sensative_words = ["users", "user", "password", "reset", "edit", "config", "file", "files", "permissions", "products", "role", "register"]
+
+#print ascii art
+print("""
+
+ ██████╗ ██████╗  █████╗ ██████╗ ██╗  ██╗ ██████╗██████╗  █████╗ ██╗    ██╗██╗     ███████╗██████╗ 
+██╔════╝ ██╔══██╗██╔══██╗██╔══██╗██║  ██║██╔════╝██╔══██╗██╔══██╗██║    ██║██║     ██╔════╝██╔══██╗
+██║  ███╗██████╔╝███████║██████╔╝███████║██║     ██████╔╝███████║██║ █╗ ██║██║     █████╗  ██████╔╝
+██║   ██║██╔══██╗██╔══██║██╔═══╝ ██╔══██║██║     ██╔══██╗██╔══██║██║███╗██║██║     ██╔══╝  ██╔══██╗
+╚██████╔╝██║  ██║██║  ██║██║     ██║  ██║╚██████╗██║  ██║██║  ██║╚███╔███╔╝███████╗███████╗██║  ██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝╚══════╝╚═╝  ╚═╝
+                                                                                                   
+github.com/gsmith257-cyber/GraphCrawler
+From: S1n1st3r
+
+""")
+
+#add headers if needed
+if args.headers:
+    headers = {header.split(":")[0]:header.split(":")[1] for header in args.headers}
+    transport = AIOHTTPTransport(url=args.url, headers=headers)
+else:
+    transport = AIOHTTPTransport(url=args.url)
+
 #get the graphql schema
-transport = AIOHTTPTransport(url=args.url)
 client = Client(transport=transport, fetch_schema_from_transport=True)
 #download the graphql schema
 schema = client.schema
@@ -115,6 +142,7 @@ introspectionQuery = gql(
 """
 )
 
+result = None
 # Execute the query on the transport
 resp = "n"
 print("[+] Downloading schema...")
@@ -134,9 +162,9 @@ try:
   with open(filename, 'a') as file:
     file.write("\n}")
     
-except:
+except Exception as e:
   print("[-] Error downloading schema, is introspection enabled?")
-  if "Apollo" or "apollo" in result:
+  if "Apollo" in str(e) or "apollo" in str(e):
     print("[+] Apollo server detected")
     resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
     if resp == "y":
@@ -148,6 +176,9 @@ except:
     else:
       print("[-] Exiting...")
       exit()
+  else:
+    print("[-] Exiting...")
+    exit()
 #cleanup query result with json
 with open(filename, "r") as f:
   result = json.load(f)
