@@ -5,7 +5,7 @@
 ## THE GraphQL automated testing tookit
 
 Graph Crawler is an automated testing tool for any GraphQL endpoint.
-It will run through and check if mutation is enabled, check for any sensative queries avaliable, such as users and files, and it will also test any easy queries it find to see if authentication is required.
+It will run through and check if mutation is enabled, check for any sensitive queries available, such as users and files, and it will also test any easy queries it find to see if authentication is required.
 
 If introspection is not enabled on the endpoint it will check if it is an Apollo Server and then can run [Clairvoyance](https://github.com/nikitastupin/clairvoyance) to brute force and grab the suggestions to try to build the schema ourselves. (See the Clairvoyance project for greater details on this). 
 It will then score the findings 1-10 with 10 being the most critical.
