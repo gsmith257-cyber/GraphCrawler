@@ -16,7 +16,7 @@ I hope this saves you as much time as it has for me
 
 ## Usage
 ```bash
-python graphCrawler.py -u https://test.com/graphql/api -o <fileName>
+python graphCrawler.py -u https://test.com/graphql/api -o <fileName> -a "<headers>"
 ```
 The output option is not required and by default it will output to schema.json
 
