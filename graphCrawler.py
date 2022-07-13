@@ -335,6 +335,19 @@ with open(filename, "r") as f:
         print("[+] Done")
 
   else:
+    print("Do you want me to list the queries that are available from the schema?")
+    resp = input("(y/n): ")
+    if resp == "y":
+      locations = []
+      h = 0
+      while h < 1000:
+        try:
+          print(result["data"]["__schema"]["types"][i]["fields"][h]["name"])
+          h += 1
+        except:
+          break
+      print("[+] " + str(h) + " queries found")
+
     print("[-] Exiting...")
     exit()
   #critical 9+
