@@ -7,7 +7,7 @@
 Graph Crawler is the most powerful automated testing toolkit for any GraphQL endpoint.
 
 ### Version 1.2 is out!!
-NEW: Can search for endpoints for you using Escape Technologie's powerful [Graphinder](https://github.com/Escape-Technologies/graphinder) tool.
+NEW: Can search for endpoints for you using Escape Technology's powerful [Graphinder](https://github.com/Escape-Technologies/graphinder) tool.
 
 It will run through and check if mutation is enabled, check for any sensitive queries available, such as users and files, and it will also test any easy queries it find to see if authentication is required.
 
