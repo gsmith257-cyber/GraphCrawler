@@ -25,6 +25,9 @@ parser.add_argument("-i", "--inputFile",
                     dest="inputFile",
                     help="Add a file with a list of endpoints to search",
                     action='store')
+parser.add_argument("-s", "--schemaFile",
+                    dest="schemaFile",
+                    help="Add a file containing the Graphql schema")
 parser.add_argument("-a", "--headers",
                     nargs='+',
                     dest="headers",
@@ -114,7 +117,11 @@ def graphinder(url):
     print("[-] Graphinder encountered an error")
     exit()
   
-def main(url, outputFile, headers):
+def main(url, args):
+  outputFile = args.output_path
+  headers = args.headers
+  schemaFile = args.schemaFile
+
   #add headers if needed
   if headers:
       headers = {header.split(":")[0]:header.split(":")[1] for header in headers}
@@ -122,128 +129,136 @@ def main(url, outputFile, headers):
   else:
       transport = AIOHTTPTransport(url=url)
 
-  #get the graphql schema
-  client = Client(transport=transport, fetch_schema_from_transport=True)
-  #download the graphql schema
-  schema = client.schema
+  if schemaFile is None:
+      #get the graphql schema
+      client = Client(transport=transport, fetch_schema_from_transport=True)
+      #download the graphql schema
+      schema = client.schema
 
-  # grab the schema from the endpoint
-  introspectionQuery = gql(
-      """
-      query IntrospectionQuery {
-    __schema {
-      queryType { name }
-      mutationType { name }
-      types {
-        ...FullType
-      }
-      directives {
-        name
-        description
-        args {
-          ...InputValue
+      # grab the schema from the endpoint
+      introspectionQuery = gql(
+          """
+          query IntrospectionQuery {
+        __schema {
+          queryType { name }
+          mutationType { name }
+          types {
+            ...FullType
+          }
+          directives {
+            name
+            description
+            args {
+              ...InputValue
+            }
+          }
         }
       }
-    }
-  }
 
-    fragment FullType on __Type {
-      kind
-      name
-      description
-      fields {
-        name
-        description
-        args {
-          ...InputValue
+        fragment FullType on __Type {
+          kind
+          name
+          description
+          fields {
+            name
+            description
+            args {
+              ...InputValue
+            }
+            type {
+              ...TypeRef
+            }
+            isDeprecated
+            deprecationReason
+          }
+          inputFields {
+            ...InputValue
+          }
+          interfaces {
+            ...TypeRef
+          }
+          enumValues {
+            name
+            description
+            isDeprecated
+            deprecationReason
+          }
+          possibleTypes {
+            ...TypeRef
+          }
         }
-        type {
-          ...TypeRef
+
+        fragment InputValue on __InputValue {
+          name
+          description
+          type { ...TypeRef }
+          defaultValue
         }
-        isDeprecated
-        deprecationReason
-      }
-      inputFields {
-        ...InputValue
-      }
-      interfaces {
-        ...TypeRef
-      }
-      enumValues {
-        name
-        description
-        isDeprecated
-        deprecationReason
-      }
-      possibleTypes {
-        ...TypeRef
-      }
-    }
 
-    fragment InputValue on __InputValue {
-      name
-      description
-      type { ...TypeRef }
-      defaultValue
-    }
-
-    fragment TypeRef on __Type {
-      kind
-      name
-      ofType {
-        kind
-        name
-        ofType {
+        fragment TypeRef on __Type {
           kind
           name
           ofType {
             kind
             name
+            ofType {
+              kind
+              name
+              ofType {
+                kind
+                name
+              }
+            }
           }
         }
-      }
-    }
 
-  """
-  )
+      """
+      )
 
-  result = None
-  # Execute the query on the transport
-  resp = "n"
-  print("[+] Downloading schema for " + url + " ...")
-  filename = url + ".json"
-  if outputFile:
-    filename = outputFile + "_" + url + ".json"
-  try:
-    result = client.execute(introspectionQuery)
-    with open(filename, "w") as f:
-      json.dump(result, f, indent=2)
-    new_line = '''{\n
-      "data": '''
-    with open(filename, 'r+') as file:
-      content = file.read()
-      file.seek(0)
-      file.write(new_line + content)
-    with open(filename, 'a') as file:
-      file.write("\n}")
-      
-  except Exception as e:
-    print("[-] Error downloading schema, is introspection enabled?")
-    if "Apollo" in str(e) or "apollo" in str(e):
-      print("[+] Apollo server detected")
-      resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
-      if resp == "y":
-        clairvoyance(filename)
-        print("Sleeping for 15 minutes while it runs...")
-        time.sleep(900)
-        print("[+] I'm awake now, let's continue...")
+      result = None
+      # Execute the query on the transport
+      resp = "n"
+      print("[+] Downloading schema for " + url + " ...")
+      filename = url + ".json"
+      if outputFile:
+        filename = outputFile + "_" + url + ".json"
+      try:
+        result = client.execute(introspectionQuery)
+        with open(filename, "w") as f:
+          json.dump(result, f, indent=2)
+        new_line = '''{\n
+          "data": '''
+        with open(filename, 'r+') as file:
+          content = file.read()
+          file.seek(0)
+          file.write(new_line + content)
+        with open(filename, 'a') as file:
+          file.write("\n}")
+          
+      except Exception as e:
+        print("[-] Error downloading schema, is introspection enabled?")
+        if "Apollo" in str(e) or "apollo" in str(e):
+          print("[+] Apollo server detected")
+          resp = input("Do you want to try to grab the schema using Clairvoyance? [y/n] ")
+          if resp == "y":
+            clairvoyance(filename)
+            print("Sleeping for 15 minutes while it runs...")
+            time.sleep(900)
+            print("[+] I'm awake now, let's continue...")
 
-      else:
-        print("[-] Exiting...")
-        return
-    else:
-      print("[-] Exiting...")
-      return
+          else:
+            print("[-] Exiting...")
+            return
+        else:
+          print("[-] Exiting...")
+          return
+  else:
+      #schema file supplied 
+      if not os.path.exists(schemaFile):
+          print(f"[-] Supplied schema file {schemaFile} does not exist. Exiting...")
+          return
+      filename = schemaFile
+
   #cleanup query result with json
   with open(filename, "r") as f:
     result = json.load(f)
@@ -420,24 +435,23 @@ def main(url, outputFile, headers):
     #medium 5+
     #low 1-5
 
-  
-if args.explore:
-  output = graphinder(args.url)
-  if output is not None:
-    for url in output:
-      main(url, args.output_path, args.headers)
+if __name__ == "__main__": 
+  if args.explore:
+    output = graphinder(args.url)
+    if output is not None:
+      for url in output:
+        main(url, args.output_path, args.headers)
+      print("[+] Done")
+      exit()
+  else:
+    if args.inputFile is not None:
+      try:
+        with open(args.inputFile, 'r') as f:
+          for line in f:
+            main(line.strip(), args)
+      except Exception as e:
+        print(e)
+    else:
+      main(args.url, args)
     print("[+] Done")
     exit()
-else:
-  if args.inputFile is not None:
-    try:
-      with open(args.inputFile, 'r') as f:
-        for line in f:
-          main(line.strip(), args.output_path, args.headers)
-    except Exception as e:
-      print(e)
-  else:
-    main(args.url, args.output_path, args.headers)
-  print("[+] Done")
-  exit()
-    
