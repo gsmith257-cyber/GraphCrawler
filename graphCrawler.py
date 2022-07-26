@@ -25,7 +25,7 @@ parser.add_argument("-i", "--inputFile",
                     dest="inputFile",
                     help="Add a file with a list of endpoints to search",
                     action='store')
-parser.add_argument("-s", "-schemaFile",
+parser.add_argument("-s", "--schemaFile",
                     dest="schemaFile",
                     help="Add a file containing the Graphql schema")
 parser.add_argument("-a", "--headers",
