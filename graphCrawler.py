@@ -6,6 +6,7 @@ import argparse
 import os
 import subprocess
 import time
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-u", "--url",
@@ -219,9 +220,10 @@ def main(url, args):
       # Execute the query on the transport
       resp = "n"
       print("[+] Downloading schema for " + url + " ...")
-      filename = url + ".json"
+      random_number = random.randint(1000, 9999 - 1)
+      filename = "output" + "_" + str(random_number) + ".json"
       if outputFile:
-        filename = outputFile + "_" + url + ".json"
+        filename = outputFile + ".json"
       try:
         result = client.execute(introspectionQuery)
         with open(filename, "w") as f:
