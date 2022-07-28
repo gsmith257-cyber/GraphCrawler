@@ -442,7 +442,7 @@ if __name__ == "__main__":
     output = graphinder(args.url)
     if output is not None:
       for url in output:
-        main(url, args.output_path, args.headers)
+        main(url, args)
       print("[+] Done")
       exit()
   else:
