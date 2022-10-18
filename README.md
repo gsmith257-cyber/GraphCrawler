@@ -19,6 +19,7 @@ If you want to dig deeper into the schema you can also use [graphql-path-enum](h
 I hope this saves you as much time as it has for me
 
 ## Usage
+1. As Baremetal Install
 ```bash
 python graphCrawler.py -u https://test.com/graphql/api -o <fileName> -a "<headers>"
 
@@ -32,7 +33,12 @@ python graphCrawler.py -u https://test.com/graphql/api -o <fileName> -a "<header
  
 ```
 The output option is not required and by default it will output to schema.json
-
+2. As Docker
+Note: As graphcrawler uses some options that need files as input or produce output, it is advised to keep all those file a working directory and mount it at container path /workspace. Your all output will be saved to that mounted directory
+```bash
+docker build -t graphcrawler:1.2 .
+docker run -v /path_to_workspace:/workspace -it graphcrawler:1.2 -u https://test.com/graphql/api  -o <filename> -a "<headers>"
+```
 ### Example output:
 <div></div>
 <img src=https://github.com/gsmith257-cyber/GraphCrawler/blob/main/output.PNG />
@@ -48,7 +54,6 @@ Wordlist from [google-10000-english](https://github.com/first20hours/google-1000
 
 
 ### TODO
-- Add docker support
 - Add option for "full report" following the endpoint search where it will run clairvoyance and all other aspects of the toolkit on the endpoints found
 - Default to "simple scan" to just find endpoints when this feature is added
 - Way Future: help craft queries based of the shema provided
