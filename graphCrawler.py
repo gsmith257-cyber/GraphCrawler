@@ -37,7 +37,7 @@ parser.add_argument("-a", "--headers",
 
 
 args = parser.parse_args()
-
+mutationLocation = 0
 bad_words = ["error", "Invalid token", "INTERNAL_SERVER_ERROR", "Unauthorized"]
 sensative_words = ["users", "user", "password", "reset", "edit", "config", "file", "files", "permissions", "products", "role", "register"]
 
@@ -285,6 +285,7 @@ def main(url, args):
       try:
         if result["data"]["__schema"]["types"][i]["name"] == mutation_type:
             print(f"[+] Located mutation in schema : {i}")
+            mutationLocation = i
             print("[+] I'll leave this for you to test, scipts arent gentle with editing data")
             break
         i += 1
@@ -428,9 +429,21 @@ def main(url, args):
         except:
           break
       print("[+] " + str(h) + " queries found")
-
-      print("[-] Exiting...")
-      return
+    print("Do you want me to list the mutations that are available from the schema?")
+    resp = input("(y/n): ")
+    if resp == "y":
+      locations = []
+      h = 0
+      while h < 1000:
+        try:
+          print(result["data"]["__schema"]["types"][mutationLocation]["fields"][h]["name"])
+          h += 1
+        except:
+          break
+      print("[+] " + str(h) + " mutations found")
+    print("[-] Exiting...")
+    return
+    
     #critical 9+
     #high 7+
     #medium 5+
