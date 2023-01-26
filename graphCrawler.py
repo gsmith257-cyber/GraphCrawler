@@ -262,7 +262,7 @@ def main(url, args):
       filename = schemaFile
 
   #cleanup query result with json
-  with open(filename, "r") as f:
+  with open(filename, "r", encoding="utf8") as f:
     result = json.load(f)
 
     #[__schema]["mutationType"]
