@@ -370,9 +370,12 @@ def main(url, args):
           queryText = """
               query {{{name}{{{field}}}}}
               """.format(name=name, field=field)
-        query = gql(
-            queryText
-        )
+        try:
+          query = gql(
+              queryText
+          )
+        except Exception as e:
+          print("Simple query errored out. Possibly bad read on schema")
         try:
           result2 = client.execute(query)
           result2 = json.loads(json.dumps(result))
