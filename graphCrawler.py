@@ -341,6 +341,10 @@ def main(url, args):
     field = ""
     for k in easy_queries:
         name = result["data"]["__schema"]["types"][i]["fields"][k]["name"]
+        if "delete" in name or "Delete" in name:
+          prompter = input("This query, " + str(name) + ", contains 'delete'. Are you sure you want to execute?: (y/n)")
+          if prompter == "n":
+            continue
         print("[+] Testing easy query : " + name)
         #get the type of the query and get fields of the type
         try:
